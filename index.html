@@ -1,448 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Server Rules</title>
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #2c3e50;
-    color: #ecf0f1;
-    overflow: hidden;
-}
-
-.container {
-    width: 100%;
-    height: 100vh;
-    display: table;
-}
-
-.sidebar {
-    display: table-cell;
-    width: 350px;
-    height: 100vh;
-    background: #34495e;
-    vertical-align: top;
-    border-right: 1px solid #4a5f7a;
-}
-
-.content {
-    display: table-cell;
-    vertical-align: top;
-    background: #2c3e50;
-    position: relative;
-}
-
-.sidebar-header {
-    padding: 20px;
-    background: #2c3e50;
-    border-bottom: 1px solid #4a5f7a;
-    text-align: center;
-}
-
-.sidebar-title {
-    color: #3498db;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.nav-item {
-    display: block;
-    padding: 15px 20px;
-    color: #bdc3c7;
-    text-decoration: none;
-    border-bottom: 1px solid #4a5f7a;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.nav-item:hover {
-    background: #3498db;
-    color: #fff;
-}
-
-.nav-item.active {
-    background: #3498db;
-    color: #fff;
-}
-
-.nav-title {
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 3px;
-}
-
-.nav-subtitle {
-    font-size: 11px;
-    color: #95a5a6;
-    display: block;
-}
-
-.content-area {
-    padding: 30px;
-    height: 100vh;
-    overflow-y: auto;
-}
-
-.welcome-header {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #3498db;
-}
-
-.welcome-title {
-    font-size: 28px;
-    color: #3498db;
-    margin-bottom: 10px;
-}
-
-.welcome-subtitle {
-    font-size: 14px;
-    color: #bdc3c7;
-    line-height: 1.4;
-}
-
-.rules-section {
-    display: none;
-    margin-bottom: 30px;
-}
-
-.rules-section.active {
-    display: block;
-}
-
-.rule-item {
-    background: #34495e;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-left: 4px solid #3498db;
-    border-radius: 0 5px 5px 0;
-}
-
-.rule-number {
-    color: #3498db;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.rule-text {
-    color: #ecf0f1;
-    line-height: 1.4;
-    font-size: 13px;
-}
-
-.section-title {
-    color: #3498db;
-    font-size: 22px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #4a5f7a;
-}
-
-.logo-area {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    color: #3498db;
-    font-size: 16px;
-    font-weight: bold;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Rules & Guidelines</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="container">
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-title">Server Rules</div>
+    <!-- Main Content Container -->
+    <main class="main-container">
+        <!-- Rules Viewer (Default View) -->
+        <div id="rulesView" class="view-container active">
+            <div class="rules-layout">
+                <!-- Sidebar Navigation -->
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <img src="resources/ddg logo.png" alt="DDG" class="sidebar-logo">
+                        <h2 class="sidebar-title">Server Rules</h2>
+                    </div>
+                    <div class="sidebar-content">
+                        <nav class="categories-nav" id="categoriesNav">
+                            <div class="category-item active" data-category="general">
+                                <span class="category-label">General</span>
+                                <span class="category-subtitle">DOs & DONTs</span>
+                            </div>
+                            <div class="category-item" data-category="nlr">
+                                <span class="category-label">NLR</span>
+                                <span class="category-subtitle">Example of NLR & cooldown timers</span>
+                            </div>
+                            <div class="category-item" data-category="warns">
+                                <span class="category-label">Warns</span>
+                                <span class="category-subtitle">Warn levels & corresponding bans</span>
+                            </div>
+                            <div class="category-item" data-category="terminology">
+                                <span class="category-label">Terminology</span>
+                                <span class="category-subtitle">Common RP terms with descriptions</span>
+                            </div>
+                            <div class="category-item" data-category="illegal">
+                                <span class="category-label">Illegal Activities</span>
+                                <span class="category-subtitle">You can be arrested for these actions</span>
+                            </div>
+                            <div class="category-item" data-category="adverts">
+                                <span class="category-label">Adverts</span>
+                                <span class="category-subtitle">Adverts that are allowed & not allowed</span>
+                            </div>
+                            <div class="category-item" data-category="basing">
+                                <span class="category-label">Basing</span>
+                                <span class="category-subtitle">Basing rules & fail bases</span>
+                            </div>
+                            <div class="category-item" data-category="goodplayer">
+                                <span class="category-label">How to be a Good Player</span>
+                                <span class="category-subtitle">Follow these examples to avoid conflict</span>
+                            </div>
+                        </nav>
+                    </div>
+                </aside>
+
+                <!-- Main Content Area -->
+                <main class="content-area">
+                    <div class="welcome-section">
+                        <div class="welcome-header">
+                            <div class="welcome-text">
+                                <h2 class="welcome-title">Welcome to DigitalDeltaGaming!</h2>
+                                <p class="welcome-subtitle">Please read all rules carefully before playing. Not following the rules may result in punishment.</p>
+                            </div>
+                            <div class="welcome-logo">
+                                <img src="resources/ddg banner.png" alt="DigitalDeltaGaming" class="ddg-banner">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="rules-content" id="rulesContent">
+                        <!-- Rules will be loaded here -->
+                    </div>
+                </main>
+            </div>
         </div>
         
-        <a href="#" class="nav-item active" onclick="showSection('general')">
-            <span class="nav-title">General Rules</span>
-            <span class="nav-subtitle">Basic server rules and guidelines for all players</span>
-        </a>
-        
-        <a href="#" class="nav-item" onclick="showSection('nlr')">
-            <span class="nav-title">NLR (New Life Rule)</span>
-            <span class="nav-subtitle">Rules about what to do when you die</span>
-        </a>
-        
-        <a href="#" class="nav-item" onclick="showSection('basing')">
-            <span class="nav-title">Basing Rules</span>
-            <span class="nav-subtitle">Rules for building and defending bases</span>
-        </a>
-        
-        <a href="#" class="nav-item" onclick="showSection('warns')">
-            <span class="nav-title">Warning System</span>
-            <span class="nav-subtitle">Warn levels & corresponding bans</span>
-        </a>
-        
-        <a href="#" class="nav-item" onclick="showSection('jobs')">
-            <span class="nav-title">Job Rules</span>
-            <span class="nav-subtitle">Specific rules for different job classes</span>
-        </a>
-        
-        <a href="#" class="nav-item" onclick="showSection('terminology')">
-            <span class="nav-title">Terminology</span>
-            <span class="nav-subtitle">Common RP terms with descriptions</span>
-        </a>
-    </div>
-    
-    <div class="content">
-        <div class="logo-area">DIGITAL DELTA GAMING</div>
-        
-        <div class="content-area">
-            <div class="welcome-header">
-                <h1 class="welcome-title">Welcome to DigitalDeltaGaming!</h1>
-                <p class="welcome-subtitle">Please read all rules carefully before playing. Not following the rules may result in punishment.</p>
-            </div>
-            
-            <!-- General Rules Section -->
-            <div id="general" class="rules-section active">
-                <h2 class="section-title">General Rules</h2>
-                
-                <div class="rule-item">
-                    <div class="rule-number">1. Use common sense.</div>
-                    <div class="rule-text">Think before you act. If something seems like it would ruin someone's experience, don't do it.</div>
+        <!-- Staff Panel View -->
+        <div id="staffView" class="view-container">
+            <div class="staff-panel">
+                <!-- Access Control -->
+                <div id="staffLogin" class="staff-login">
+                    <div class="login-card">
+                        <h2>Staff Access Required</h2>
+                        <p>Enter the staff password to access the rule management panel.</p>
+                        <input type="password" id="staffPassword" placeholder="Staff Password" class="password-input">
+                        <button id="loginBtn" class="login-btn">Access Panel</button>
+                        <button id="backFromLogin" class="back-btn">← Back to Rules</button>
+                    </div>
                 </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">2. If you find yourself using a "loophole" in the rules to your advantage, it is likely you are breaking at least one other rule.</div>
-                    <div class="rule-text">Don't try to exploit rule technicalities. Follow the spirit of the rules, not just the letter.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">3. No politics, harassment, sexism, racism, discrimination, bigotry, porn, NSFW content, malicious behavior, etc.</div>
-                    <div class="rule-text">Keep the server friendly and welcoming for everyone.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">4. Crossfire is counted as RDM.</div>
-                    <div class="rule-text">Be careful when shooting - you're responsible for where your bullets go.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">5. Running into spawn to avoid any roleplay situation is considered FailRP.</div>
-                    <div class="rule-text">Don't use spawn as a safe zone during roleplay scenarios.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">6. No class can /advert murder or /advert counter.</div>
-                    <div class="rule-text">These adverts are not allowed for any job class.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">7. No propspam, propminges, propsurf, propclimb, propblock, bodyblock etc.</div>
-                    <div class="rule-text">Don't abuse props or block players/areas with your body.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">8. Do not FailRP and/or FearRP.</div>
-                    <div class="rule-text">Act realistically and show appropriate fear when threatened.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">9. "FearRP is doing something roleplay wise out of fear (e.g. someone is pointing a gun at you, you are not allowed to take out a weapon or run away). "FailRP is doing something against the rules or your job rules/description.</div>
-                    <div class="rule-text">Understand the difference between FearRP and FailRP situations.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">10. Voice-changers aren't allowed.</div>
-                    <div class="rule-text">Use your natural voice for roleplay.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">11. No mass RPbinds, all binds must specify one action, you cannot bind text too.</div>
-                    <div class="rule-text">Keep binds simple and specific to single actions.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">12. Self supplying weapons by spawning as a job with a desired weapon and dropping it is considered FailRP.</div>
-                    <div class="rule-text">Don't exploit job switching to get weapons.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">13. Do not bait and or scam players. (In-game, Donation wise)</div>
-                    <div class="rule-text">Be honest in all your dealings with other players.</div>
-                </div>
-            </div>
-            
-            <!-- NLR Section -->
-            <div id="nlr" class="rules-section">
-                <h2 class="section-title">NLR (New Life Rule)</h2>
-                
-                <div class="rule-item">
-                    <div class="rule-number">NLR Timer: 3 Minutes</div>
-                    <div class="rule-text">You cannot return to the area where you died for 3 minutes.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Forget Previous Life</div>
-                    <div class="rule-text">You must forget everything from your previous life including who killed you and why.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">No Revenge Killing</div>
-                    <div class="rule-text">You cannot kill someone who killed you in your previous life.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">NLR Area</div>
-                    <div class="rule-text">The NLR area extends in a reasonable radius around where you died.</div>
-                </div>
-            </div>
-            
-            <!-- Basing Rules Section -->
-            <div id="basing" class="rules-section">
-                <h2 class="section-title">Basing Rules</h2>
-                
-                <div class="rule-item">
-                    <div class="rule-number">No Crouch/Jump Bases</div>
-                    <div class="rule-text">Bases that require crouching or jumping to navigate are not allowed.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">No Maze Bases</div>
-                    <div class="rule-text">Bases cannot be designed as confusing mazes.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Maximum 3 Fading Doors</div>
-                    <div class="rule-text">You can have a maximum of 3 fading doors in your base.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">No Pixel Gaps</div>
-                    <div class="rule-text">Don't create tiny gaps that are hard to see but allow shooting.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">No Sky Bases</div>
-                    <div class="rule-text">Bases must be built on solid ground, not floating in the air.</div>
-                </div>
-            </div>
-            
-            <!-- Warning System Section -->
-            <div id="warns" class="rules-section">
-                <h2 class="section-title">Warning System</h2>
-                
-                <div class="rule-item">
-                    <div class="rule-number">1-2 Warnings</div>
-                    <div class="rule-text">Verbal warning from staff member</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">3-4 Warnings</div>
-                    <div class="rule-text">1 day ban from the server</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">5-6 Warnings</div>
-                    <div class="rule-text">3 day ban from the server</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">7+ Warnings</div>
-                    <div class="rule-text">1 week ban or permanent ban depending on severity</div>
-                </div>
-            </div>
-            
-            <!-- Job Rules Section -->
-            <div id="jobs" class="rules-section">
-                <h2 class="section-title">Job-Specific Rules</h2>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Police/Government Jobs</div>
-                    <div class="rule-text">Must follow all laws and government procedures. Cannot abuse power or randomly arrest citizens. Must have valid reason for searches and arrests.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Criminal Jobs</div>
-                    <div class="rule-text">Cannot kill other criminals without valid reason. Must advert before raiding. Cannot camp spawn areas or government buildings.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Citizen Jobs</div>
-                    <div class="rule-text">Cannot own illegal weapons without proper licenses. Must follow all server laws. Can call police for assistance.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Special Jobs</div>
-                    <div class="rule-text">Each special job has specific rules listed in their job description. Read carefully before playing.</div>
-                </div>
-            </div>
-            
-            <!-- Terminology Section -->
-            <div id="terminology" class="rules-section">
-                <h2 class="section-title">Common RP Terminology</h2>
-                
-                <div class="rule-item">
-                    <div class="rule-number">RDM - Random Death Match</div>
-                    <div class="rule-text">Killing someone without a valid roleplay reason.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">RDA - Random Arrest</div>
-                    <div class="rule-text">Arresting someone without a valid reason.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">FailRP - Fail Roleplay</div>
-                    <div class="rule-text">Acting in a way that breaks roleplay or doesn't make sense.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">FearRP - Fear Roleplay</div>
-                    <div class="rule-text">Acting appropriately when your character should be afraid.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">NLR - New Life Rule</div>
-                    <div class="rule-text">Forgetting your previous life after dying.</div>
-                </div>
-                
-                <div class="rule-item">
-                    <div class="rule-number">Metagaming</div>
-                    <div class="rule-text">Using information your character wouldn't know in roleplay.</div>
+
+                <!-- Staff Panel Content -->
+                <div id="staffContent" class="staff-content hidden">
+                    <div class="staff-header">
+                        <h2>Rule Management Panel</h2>
+                        <div class="staff-controls">
+                            <button id="exportRules" class="control-btn">Export Rules</button>
+                            <button id="importRules" class="control-btn">Import Rules</button>
+                            <button id="backFromStaff" class="back-btn">← Back to Rules</button>
+                        </div>
+                    </div>
+                    
+                    <div class="staff-workspace">
+                        <!-- Category Manager -->
+                        <div class="category-manager">
+                            <h3>Manage Categories</h3>
+                            <div class="category-list" id="categoryList">
+                                <!-- Category management interface -->
+                            </div>
+                            <button id="addCategory" class="add-btn">+ Add New Category</button>
+                        </div>
+
+                        <!-- Rule Editor -->
+                        <div class="rule-editor">
+                            <h3>Rule Editor</h3>
+                            <div class="editor-header">
+                                <select id="categorySelect" class="category-select">
+                                    <option value="">Select a category to edit...</option>
+                                </select>
+                                <button id="saveRules" class="save-btn">Save Changes</button>
+                            </div>
+                            
+                            <!-- Rich Text Editor Toolbar -->
+                            <div class="editor-toolbar">
+                                <button class="toolbar-btn" data-command="bold" title="Bold">B</button>
+                                <button class="toolbar-btn" data-command="italic" title="Italic">I</button>
+                                <button class="toolbar-btn" data-command="underline" title="Underline">U</button>
+                                <div class="toolbar-separator"></div>
+                                <button class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">1.</button>
+                                <button class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">•</button>
+                                <div class="toolbar-separator"></div>
+                                <input type="color" id="textColor" class="color-picker" title="Text Color">
+                                <button class="toolbar-btn" id="insertImage" title="Insert Image">📷</button>
+                                <button class="toolbar-btn" id="insertVideo" title="Insert Video">📹</button>
+                                <button class="toolbar-btn" id="insertCode" title="Code Block">&lt;/&gt;</button>
+                            </div>
+                            
+                            <!-- Content Editor -->
+                            <div id="ruleEditor" class="content-editor" contenteditable="true" placeholder="Select a category and start editing rules...">
+                            </div>
+
+                            <!-- Preview -->
+                            <div class="editor-preview">
+                                <h4>Preview</h4>
+                                <div id="rulePreview" class="preview-content">
+                                    Preview will appear here...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script>
-function showSection(sectionId) {
-    // Hide all sections
-    var sections = document.getElementsByClassName('rules-section');
-    for (var i = 0; i < sections.length; i++) {
-        sections[i].className = 'rules-section';
-    }
-    
-    // Show selected section
-    document.getElementById(sectionId).className = 'rules-section active';
-    
-    // Update nav items
-    var navItems = document.getElementsByClassName('nav-item');
-    for (var i = 0; i < navItems.length; i++) {
-        navItems[i].className = 'nav-item';
-    }
-    
-    // Find and activate the clicked nav item
-    var clickedItem = event.target;
-    while (clickedItem && clickedItem.className.indexOf('nav-item') === -1) {
-        clickedItem = clickedItem.parentNode;
-    }
-    if (clickedItem) {
-        clickedItem.className = 'nav-item active';
-    }
-}
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html> 

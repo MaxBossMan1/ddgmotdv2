@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GMod Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a202c;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background-color: #2d3748;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .content {
+            background-color: #2d3748;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            color: #4299e1;
+            margin-top: 0;
+        }
+        
+        h2 {
+            color: #63b3ed;
+        }
+        
+        .rule-item {
+            background-color: #4a5568;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #4299e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DigitalDeltaGaming - Server Rules</h1>
+            <p>Welcome to DDG! Please read the rules below.</p>
+        </div>
+        
+        <div class="content">
+            <h2>General Rules</h2>
+            
+            <div class="rule-item">
+                <strong>Rule 1:</strong> No RDM (Random Death Match) - Do not kill players without a valid RP reason.
+            </div>
+            
+            <div class="rule-item">
+                <strong>Rule 2:</strong> No breaking character - Stay in character at all times.
+            </div>
+            
+            <div class="rule-item">
+                <strong>Rule 3:</strong> Respect all players and staff members.
+            </div>
+            
+            <div class="rule-item">
+                <strong>Rule 4:</strong> No mic spam or chat spam.
+            </div>
+            
+            <h2>NLR (New Life Rule)</h2>
+            
+            <div class="rule-item">
+                <strong>NLR Timer:</strong> 3 minutes - You cannot return to the area where you died.
+            </div>
+            
+            <div class="rule-item">
+                <strong>Memory Loss:</strong> Forget everything from your previous life.
+            </div>
+            
+            <h2>Warning System</h2>
+            
+            <div class="rule-item">
+                <strong>1-2 Warns:</strong> Verbal warning from staff
+            </div>
+            
+            <div class="rule-item">
+                <strong>3-4 Warns:</strong> 1 day ban
+            </div>
+            
+            <div class="rule-item">
+                <strong>5+ Warns:</strong> 3 day ban or longer
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Ultra-basic JavaScript test
+        console.log('GMod Test Page Loaded');
+        
+        // Test if basic DOM manipulation works
+        document.title = 'DDG Rules - Loaded Successfully';
+        
+        // Add a simple click handler
+        var rules = document.getElementsByClassName('rule-item');
+        for (var i = 0; i < rules.length; i++) {
+            rules[i].onclick = function() {
+                this.style.backgroundColor = '#5a6578';
+                setTimeout(function() {
+                    // Reset color after 1 second
+                }, 1000);
+            };
+        }
+    </script>
+</body>
+</html> 

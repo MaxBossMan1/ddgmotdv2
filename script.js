@@ -45,7 +45,11 @@ function safeApiCall(url, method, data, headers) {
         // Send request
         if (data) {
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(data));
+            if (typeof JSON !== 'undefined' && JSON.stringify) {
+                xhr.send(JSON.stringify(data));
+            } else {
+                xhr.send(data.toString());
+            }
         } else {
             xhr.send();
         }
@@ -53,7 +57,12 @@ function safeApiCall(url, method, data, headers) {
         // Handle response
         if (xhr.status === 200 || xhr.status === 201) {
             try {
-                return JSON.parse(xhr.responseText);
+                if (typeof JSON !== 'undefined' && JSON.parse) {
+                    return JSON.parse(xhr.responseText);
+                } else {
+                    // Fallback for very old browsers - return raw text
+                    return xhr.responseText;
+                }
             } catch (e) {
                 console.log('JSON Parse Error:', e);
                 return null;
@@ -93,13 +102,15 @@ function loadCategories() {
     var response = safeApiCall(apiBaseUrl + '/rules/categories');
     
     if (response && response.categories && response.categories.length > 0) {
-        allCategories = response.categories.map(function(cat) {
-            return {
+        allCategories = [];
+        for (var i = 0; i < response.categories.length; i++) {
+            var cat = response.categories[i];
+            allCategories.push({
                 id: cat.id,
                 name: cat.name,
                 subtitle: cat.description || ''
-            };
-        });
+            });
+        }
         console.log('Loaded', allCategories.length, 'categories from API');
         return true;
     } else {
@@ -137,13 +148,18 @@ function formatRuleContent(content) {
     // Process the content to highlight DO and DO NOT items
     var formatted = content;
     
-    // Replace DO NOT patterns with styled spans
+    // Replace DO NOT patterns with styled spans first
     formatted = formatted.replace(/DO NOT\s+([^<\n]+)/g, function(match, text) {
         return '<span class="rule-do-not"><strong>DO NOT</strong> ' + text + '</span>';
     });
     
-    // Replace DO patterns (but not DO NOT) with styled spans  
-    formatted = formatted.replace(/(?<!DO )DO\s+([^<\n]+)/g, function(match, text) {
+    // Replace standalone DO patterns (avoiding already processed DO NOT)
+    // Use a more compatible approach without negative lookbehind
+    formatted = formatted.replace(/\bDO\s+([^<\n]+)/g, function(match, text) {
+        // Skip if this is part of a DO NOT that was already processed
+        if (match.indexOf('DO NOT') !== -1) {
+            return match;
+        }
         return '<span class="rule-do"><strong>DO</strong> ' + text + '</span>';
     });
     
@@ -151,7 +167,14 @@ function formatRuleContent(content) {
 }
 
 function renderCategories() {
-    var nav = document.querySelector('.categories-nav');
+    var nav = document.getElementById('categoriesNav');
+    if (!nav) {
+        // Fallback for older browsers
+        var navs = document.getElementsByClassName('categories-nav');
+        if (navs.length > 0) {
+            nav = navs[0];
+        }
+    }
     if (!nav) return;
     
     nav.innerHTML = '';
@@ -196,8 +219,8 @@ function switchCategory(categoryId) {
     console.log('Switching to category:', categoryId);
     currentCategory = categoryId;
     
-    // Update active category
-    var categoryItems = document.querySelectorAll('.category-item');
+    // Update active category - use getElementsByClassName for compatibility
+    var categoryItems = document.getElementsByClassName('category-item');
     for (var i = 0; i < categoryItems.length; i++) {
         var item = categoryItems[i];
         if (item.getAttribute('data-category') === categoryId) {
@@ -234,9 +257,19 @@ function initializeApp() {
     console.log('MOTD App initialized successfully');
 }
 
-// Initialize when page loads
+// Initialize when page loads - compatible with older browsers
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
+    if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    } else if (document.attachEvent) {
+        document.attachEvent('onreadystatechange', function() {
+            if (document.readyState === 'complete') {
+                initializeApp();
+            }
+        });
+    } else {
+        window.onload = initializeApp;
+    }
 } else {
     initializeApp();
 } 

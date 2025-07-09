@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Rules & Guidelines</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+    <!-- Main Content Container -->
+    <main class="main-container">
+        <!-- Rules Viewer (Default View) -->
+        <div id="rulesView" class="view-container active">
+            <div class="rules-layout">
+                <!-- Sidebar Navigation -->
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <img src="resources/ddg logo.png" alt="DDG" class="sidebar-logo">
+                        <h2 class="sidebar-title">Server Rules</h2>
+                    </div>
+                    <div class="sidebar-content">
+                        <nav class="categories-nav">
+                            <div class="category-item active" data-category="general">
+                                <span class="category-label">General</span>
+                                <span class="category-subtitle">DOs & DONTs</span>
+                            </div>
+                            <div class="category-item" data-category="nlr">
+                                <span class="category-label">NLR</span>
+                                <span class="category-subtitle">Example of NLR & cooldown timers</span>
+                            </div>
+                            <div class="category-item" data-category="warns">
+                                <span class="category-label">Warns</span>
+                                <span class="category-subtitle">Warn levels & corresponding bans</span>
+                            </div>
+                            <div class="category-item" data-category="terminology">
+                                <span class="category-label">Terminology</span>
+                                <span class="category-subtitle">Common RP terms with descriptions</span>
+                            </div>
+                            <div class="category-item" data-category="illegal">
+                                <span class="category-label">Illegal Activities</span>
+                                <span class="category-subtitle">You can be arrested for these actions</span>
+                            </div>
+                            <div class="category-item" data-category="adverts">
+                                <span class="category-label">Adverts</span>
+                                <span class="category-subtitle">Adverts that are allowed & not allowed</span>
+                            </div>
+                            <div class="category-item" data-category="basing">
+                                <span class="category-label">Basing</span>
+                                <span class="category-subtitle">Basing rules & fail bases</span>
+                            </div>
+                            <div class="category-item" data-category="goodplayer">
+                                <span class="category-label">How to be a Good Player</span>
+                                <span class="category-subtitle">Follow these examples to avoid conflict</span>
+                            </div>
+                        </nav>
+                    </div>
+                </aside>
+
+                <!-- Main Content Area -->
+                <main class="content-area">
+                    <div class="welcome-section">
+                        <div class="welcome-header">
+                            <div class="welcome-text">
+                                <h2 class="welcome-title">Welcome to DigitalDeltaGaming!</h2>
+                                <p class="welcome-subtitle">Please read all rules carefully before playing. Not following the rules may result in punishment.</p>
+                            </div>
+                            <div class="welcome-logo">
+                                <img src="resources/ddg banner.png" alt="DigitalDeltaGaming" class="ddg-banner">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="rules-content" id="rulesContent">
+                        <!-- Rules will be loaded here -->
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Staff Panel View -->
+        <div id="staffView" class="view-container">
+            <div class="staff-panel">
+                <!-- Access Control -->
+                <div id="staffLogin" class="staff-login">
+                    <div class="login-card">
+                        <h2>Staff Access Required</h2>
+                        <p>Enter the staff password to access the rule management panel.</p>
+                        <input type="password" id="staffPassword" placeholder="Staff Password" class="password-input">
+                        <button id="loginBtn" class="login-btn">Access Panel</button>
+                        <button id="backFromLogin" class="back-btn">← Back to Rules</button>
+                    </div>
+                </div>
+
+                <!-- Staff Panel Content -->
+                <div id="staffContent" class="staff-content hidden">
+                    <div class="staff-header">
+                        <h2>Rule Management Panel</h2>
+                        <div class="staff-controls">
+                            <button id="exportRules" class="control-btn">Export Rules</button>
+                            <button id="importRules" class="control-btn">Import Rules</button>
+                            <button id="backFromStaff" class="back-btn">← Back to Rules</button>
+                        </div>
+                    </div>
+
+                    <div class="staff-workspace">
+                        <!-- Category Manager -->
+                        <div class="category-manager">
+                            <h3>Manage Categories</h3>
+                            <div class="category-list" id="categoryList">
+                                <!-- Category management interface -->
+                            </div>
+                            <button id="addCategory" class="add-btn">+ Add New Category</button>
+                        </div>
+
+                        <!-- Rule Editor -->
+                        <div class="rule-editor">
+                            <h3>Rule Editor</h3>
+                            <div class="editor-header">
+                                <select id="categorySelect" class="category-select">
+                                    <option value="">Select a category to edit...</option>
+                                </select>
+                                <button id="saveRules" class="save-btn">Save Changes</button>
+                            </div>
+                            
+                            <!-- Rich Text Editor Toolbar -->
+                            <div class="editor-toolbar">
+                                <button class="toolbar-btn" data-command="bold" title="Bold">B</button>
+                                <button class="toolbar-btn" data-command="italic" title="Italic">I</button>
+                                <button class="toolbar-btn" data-command="underline" title="Underline">U</button>
+                                <div class="toolbar-separator"></div>
+                                <button class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">1.</button>
+                                <button class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">•</button>
+                                <div class="toolbar-separator"></div>
+                                <input type="color" id="textColor" class="color-picker" title="Text Color">
+                                <button class="toolbar-btn" id="insertImage" title="Insert Image">📷</button>
+                                <button class="toolbar-btn" id="insertVideo" title="Insert Video">📹</button>
+                                <button class="toolbar-btn" id="insertCode" title="Code Block">&lt;/&gt;</button>
+                            </div>
+
+                            <!-- Content Editor -->
+                            <div id="ruleEditor" class="content-editor" contenteditable="true" placeholder="Select a category and start editing rules...">
+                            </div>
+
+                            <!-- Preview -->
+                            <div class="editor-preview">
+                                <h4>Preview</h4>
+                                <div id="rulePreview" class="preview-content">
+                                    Preview will appear here...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html> 

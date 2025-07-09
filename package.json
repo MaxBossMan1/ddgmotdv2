@@ -1,0 +1,28 @@
+{
+  "name": "ddgmotd-system",
+  "version": "1.0.0",
+  "description": "DarkRP MOTD System with Backend Integration - GMod Compatible",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "backend": "cd backend && node server.js",
+    "install-backend": "cd backend && npm install"
+  },
+  "keywords": [
+    "gmod",
+    "darkrp",
+    "motd",
+    "rules",
+    "server"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.21.0",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "path": "^0.12.7",
+    "sqlite3": "^5.1.7"
+  }
+}

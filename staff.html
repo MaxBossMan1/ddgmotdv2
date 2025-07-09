@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalDeltaGaming - Staff Panel</title>
+    <link rel="icon" type="image/x-icon" href="resources/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="resources/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="resources/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="resources/apple-touch-icon.png">
+    
+    <!-- Quill.js for rich text editing -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #1a202c 100%);
+            background-attachment: fixed;
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Glass overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-logo {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary {
+            background: rgba(66, 153, 225, 0.3);
+            color: white;
+            border: 1px solid rgba(66, 153, 225, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: rgba(66, 153, 225, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(66, 153, 225, 0.3);
+        }
+
+        .btn-success {
+            background: rgba(72, 187, 120, 0.3);
+            color: white;
+            border: 1px solid rgba(72, 187, 120, 0.5);
+        }
+
+        .btn-success:hover {
+            background: rgba(72, 187, 120, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-danger {
+            background: rgba(245, 101, 101, 0.3);
+            color: white;
+            border: 1px solid rgba(245, 101, 101, 0.5);
+        }
+
+        .btn-danger:hover {
+            background: rgba(245, 101, 101, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 101, 101, 0.3);
+        }
+
+        /* Auth Section */
+        .auth-section {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .discord-btn {
+            background: linear-gradient(135deg, #5865F2, #4752C4);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Categories Panel */
+        .categories-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .categories-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .categories-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .categories-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .categories-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .category-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .category-item:hover, .category-item.active {
+            background: rgba(66, 153, 225, 0.2);
+            border-color: rgba(66, 153, 225, 0.3);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.15);
+        }
+
+        .category-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .category-description {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+
+        .category-actions {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(66, 153, 225, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Quill Editor Overrides */
+        .ql-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0 0 8px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 300px;
+        }
+
+        .ql-toolbar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px 8px 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px;
+        }
+
+        .ql-toolbar .ql-stroke {
+            stroke: rgba(255, 255, 255, 0.8);
+        }
+
+        .ql-toolbar .ql-fill {
+            fill: rgba(255, 255, 255, 0.8);
+        }
+
+        .ql-toolbar .ql-picker-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .ql-toolbar .ql-picker-options {
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ql-toolbar .ql-picker-item {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .ql-toolbar .ql-picker-item:hover {
+            background: rgba(66, 153, 225, 0.2);
+        }
+
+        .ql-toolbar button {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .ql-toolbar button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .ql-toolbar button.ql-active {
+            background: rgba(66, 153, 225, 0.3);
+        }
+
+        .ql-editor {
+            color: white;
+            min-height: 300px;
+        }
+
+        .ql-editor::before {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .ql-editor strong {
+            color: white;
+        }
+
+        .ql-editor em {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Loading and Error States */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .error {
+            background: rgba(245, 101, 101, 0.2);
+            border: 1px solid rgba(245, 101, 101, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+        }
+
+        .success {
+            background: rgba(72, 187, 120, 0.2);
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #68d391;
+        }
+
+        /* User Info */
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .header-actions {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .user-section {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header, .auth-section, .panel {
+                padding: 1.5rem;
+            }
+            
+            .header-title {
+                font-size: 1.4rem;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .user-section {
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+            
+            .user-details {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .user-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+                width: 100%;
+            }
+            
+            .user-details {
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+            
+            .category-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <img src="resources/ddg logo.png" alt="DigitalDeltaGaming" class="header-logo">
+                <h1 class="header-title">Staff Panel</h1>
+            </div>
+                            <div class="header-actions">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-eye"></i>
+                        View Main Page
+                    </a>
+                    <div id="userSection" style="display: none;" class="user-section">
+                        <div class="user-info">
+                            <img id="userAvatar" class="user-avatar" alt="User Avatar">
+                            <div class="user-details">
+                                <span id="userName" class="user-name"></span>
+                                <span id="userRole" class="user-role"></span>
+                            </div>
+                        </div>
+                        <button id="discordSettingsBtn" class="btn btn-primary" style="display: none;">
+                            <i class="fab fa-discord"></i>
+                            Discord Settings
+                        </button>
+                        <button id="logoutBtn" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+        </header>
+
+        <!-- Authentication Section -->
+        <div id="authSection" class="auth-section">
+            <h2 class="auth-title">Staff Authentication Required</h2>
+            <p class="auth-subtitle">Please authenticate with Discord to access the staff panel</p>
+            <a href="/api/auth/discord" class="discord-btn">
+                <i class="fab fa-discord"></i>
+                Login with Discord
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="main-content" style="display: none;">
+            <!-- Categories Panel -->
+            <div class="panel">
+                <h2 class="panel-title">
+                    <i class="fas fa-list"></i>
+                    Categories
+                </h2>
+                
+                <div class="form-group">
+                    <button id="addCategoryBtn" class="btn btn-success">
+                        <i class="fas fa-plus"></i>
+                        Add Category
+                    </button>
+                </div>
+
+                <div id="categoriesList" class="categories-list">
+                    <!-- Categories will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Rules Editor Panel -->
+            <div class="panel">
+                <h2 class="panel-title">
+                    <i class="fas fa-edit"></i>
+                    Rules Editor
+                </h2>
+                
+                <div id="editorSection">
+                    <div class="form-group">
+                        <label class="form-label">Category Title</label>
+                        <input type="text" id="ruleTitle" class="form-input" placeholder="Enter rule title...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Content</label>
+                        <div id="editor"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="saveRuleBtn" class="btn btn-success">
+                            <i class="fas fa-save"></i>
+                            Save Rules
+                        </button>
+                        <button id="previewBtn" class="btn btn-primary">
+                            <i class="fas fa-eye"></i>
+                            Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discord Settings Modal -->
+    <div id="discordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fab fa-discord"></i> Discord Role Permissions</h3>
+                <button class="modal-close" onclick="closeDiscordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="discordStatus" class="status-section">
+                    <h4>Bot Status</h4>
+                    <div id="botStatus" class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Checking...</span>
+                    </div>
+                </div>
+                
+                <div id="rolePermissions" class="permissions-section">
+                    <h4>Role Permissions</h4>
+                    <div id="rolesList"></div>
+                    
+                    <div class="add-role-section">
+                        <h5>Add Role Permission</h5>
+                        <div class="form-group">
+                            <label>Discord Role Name:</label>
+                            <input type="text" id="newRoleName" placeholder="Enter role name...">
+                        </div>
+                        <div class="form-group">
+                            <label>Permission Level:</label>
+                            <select id="newRolePermission">
+                                <option value="user">User (No Access)</option>
+                                <option value="staff">Staff (Edit Rules)</option>
+                                <option value="moderator">Moderator (Edit Rules + Moderate)</option>
+                                <option value="admin">Admin (Full Access)</option>
+                                <option value="owner">Owner (Full Access)</option>
+                            </select>
+                        </div>
+                        <button id="addRoleBtn" class="btn btn-success">Add Role</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Styles -->
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: white;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .status-section, .permissions-section {
+            margin-bottom: 2rem;
+        }
+
+        .status-section h4, .permissions-section h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff6b6b;
+        }
+
+        .status-dot.connected {
+            background: #51cf66;
+        }
+
+        .status-text {
+            color: white;
+            font-weight: 500;
+        }
+
+        .role-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .role-name {
+            font-weight: 600;
+            color: white;
+        }
+
+        .role-permission {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .add-role-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .add-role-section h5 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .add-role-section .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .add-role-section label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        .add-role-section input, .add-role-section select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .add-role-section input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .default-badge {
+            background: rgba(66, 153, 225, 0.3);
+            color: #4299e1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.5);
+        }
+
+        .default-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+    </style>
+
+    <!-- Quill.js -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
+    <script src="staff.js"></script>
+</body>
+</html> 

@@ -25,6 +25,7 @@ const discordBot = require('./services/discordBot');
 
 // Initialize Express app
 const app = express();
+app.set('trust proxy', 1); // Trust first proxy (nginx)
 const server = createServer(app);
 const io = new Server(server, {
   cors: {

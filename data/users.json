@@ -1,0 +1,18 @@
+[
+  {
+    "steamid": "76561198157812847",
+    "displayName": "MaxBossMan1",
+    "role": "admin",
+    "addedBy": "system",
+    "addedAt": "2024-01-01T00:00:00.000Z",
+    "avatar": "https://avatars.steamstatic.com/69b0dbeb3ae8c452a5cf2df29e5606a244e85aef.jpg",
+    "lastLogin": "2025-07-15T07:33:12.899Z"
+  },
+  {
+    "steamid": "76561198097701525",
+    "displayName": "Rexxor",
+    "role": "admin",
+    "addedBy": "76561198157812847",
+    "addedAt": "2025-07-15T07:35:42.969Z"
+  }
+]

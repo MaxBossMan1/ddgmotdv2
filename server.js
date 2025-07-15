@@ -59,8 +59,8 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) {
 
 // Steam Passport Strategy
 passport.use(new SteamStrategy({
-    returnURL: `http://localhost:${PORT}/auth/steam/return`,
-    realm: `http://localhost:${PORT}/`,
+    returnURL: `http://34.123.70.166:${PORT}/auth/steam/return`,
+    realm: `http://34.123.70.166:${PORT}/`,
     apiKey: STEAM_API_KEY
 }, (identifier, profile, done) => {
     // Extract Steam ID from identifier

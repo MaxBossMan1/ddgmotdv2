@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Prison Roleplay - Rules</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('background.jpg') center center fixed;
+            background-size: cover;
+            color: black;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Blur overlay for background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('background.jpg') center center fixed;
+            background-size: cover;
+            filter: blur(8px);
+            z-index: -2;
+        }
+        
+        /* Remove the login-register CSS since we're removing the buttons */
+        /* .login-register styles can be deleted */
+        
+        /* Enhanced fade overlay with CSS custom property */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(0,0,0,var(--scroll-opacity, 0.3)) 0%, 
+                rgba(0,0,0,calc(var(--scroll-opacity, 0.3) + 0.2)) 50%, 
+                rgba(0,0,0,calc(var(--scroll-opacity, 0.3) + 0.5)) 100%);
+            z-index: -1;
+            transition: all 0.1s ease;
+        }
+        
+        /* Main content wrapper to ensure proper layering */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            background: rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: #4a90e2; /* Full blue background */
+            background: -webkit-gradient(linear, left top, left bottom, from(#4a90e2), to(#357abd));
+            background: -webkit-linear-gradient(top, #4a90e2, #357abd);
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .login-register {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            z-index: 10;
+        }
+        
+        .login-register a {
+            color: white; /* White text on blue background */
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .login-register a:hover {
+            color: #ccc;
+        }
+        
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: white;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin: 0;
+            /* Remove the separate blue background styling */
+        }
+        
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        
+        /* Remove this CSS block:
+        .intro-text {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.6;
+            color: black;
+        }
+        */
+        
+        .main-content {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 0; /* Remove border radius for cleaner look */
+            margin: 20px 0;
+            border: 1px solid #ddd; /* Add subtle border */
+        }
+        
+        .contents-section h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: black;
+            margin-bottom: 15px;
+        }
+        
+        .contents-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+            -webkit-columns: 4;
+            -moz-columns: 4;
+            columns: 4;
+            -webkit-column-gap: 20px;
+            -moz-column-gap: 20px;
+            column-gap: 20px;
+        }
+        
+        .contents-section li {
+            margin-bottom: 8px;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        
+        .contents-section a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .contents-section a:hover {
+            text-decoration: underline;
+        }
+        
+        .category-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            margin: 40px 0 20px 0;
+        }
+        
+        .category-title:first-of-type {
+            margin-top: 0;
+        }
+        
+        .category-content {
+            color: black;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        /* Style for HTML content from rich text editor */
+        .category-content p {
+            margin: 10px 0;
+        }
+        
+        .category-content ol, .category-content ul {
+            margin: 10px 0;
+            padding-left: 30px;
+            list-style-type: decimal; /* Force numbered lists */
+        }
+        
+        .category-content ul {
+            list-style-type: decimal; /* Convert bullet lists to numbered */
+        }
+        
+        .category-content li {
+            margin: 5px 0;
+        }
+        
+        .category-content strong {
+            font-weight: bold;
+        }
+        
+        .category-content em {
+            font-style: italic;
+        }
+        
+        .category-content h1, .category-content h2, .category-content h3 {
+            margin: 20px 0 10px 0;
+            font-weight: bold;
+        }
+        
+        /* Image support for rich text editor */
+        .category-content img {
+            max-width: 200px; /* Small thumbnail size */
+            height: auto;
+            margin: 10px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer; /* Show it's clickable */
+            transition: transform 0.2s ease;
+        }
+        
+        .category-content img:hover {
+            transform: scale(1.05); /* Slight hover effect */
+        }
+        
+        /* Modal overlay for expanded images */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+        
+        .image-modal img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        .image-modal .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .category-content figure {
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .category-content figure img {
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #4a90e2;
+            font-style: italic;
+        }
+        
+        .error {
+            text-align: center;
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 12px;
+            color: #ccc;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 50px;
+        }
+        
+        .facebook-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #3b5998;
+            border-radius: 50%;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="header">
+            <div class="title">RULES</div>
+            <div class="subtitle">Prison Roleplay</div>
+        </div>
+        
+        <div class="content">
+            <!-- Remove this entire div:
+            <div class="intro-text">
+                Our community strives to bring fun to players and is constantly finding new ways and we try our hardest to implement them. We are hoping to thrive as a community and open new possibilities for upcoming staff members
+            </div>
+            -->
+            
+            <div class="main-content" id="main-content">
+                <div class="loading">Loading rules...</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Copyright 2019-2020 © Digital Delta Gaming
+        </div>
+        
+        <a href="#" class="facebook-icon">f</a>
+    </div>
+    
+    <!-- Add scroll fade effect script -->
+    <script>
+        // Enhanced scroll fade effect
+        window.addEventListener('scroll', function() {
+            var scrolled = window.pageYOffset;
+            var rate = scrolled * -0.5;
+            var opacity = Math.min(0.9, 0.3 + (scrolled / 1000));
+            
+            // Update the fade overlay opacity based on scroll
+            document.body.style.setProperty('--scroll-opacity', opacity);
+        });
+    </script>
+    
+    <script>
+        // Simple XMLHttpRequest for Awesomium compatibility
+        function makeRequest(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            callback(null, data);
+                        } catch (e) {
+                            callback('Failed to parse response: ' + e.message);
+                        }
+                    } else {
+                        callback('Request failed with status: ' + xhr.status);
+                    }
+                }
+            };
+            xhr.send();
+        }
+        
+        // Create a safe ID for anchors
+        function createSafeId(name) {
+            return 'category-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        }
+        
+        // Sanitize HTML content to prevent XSS while allowing basic formatting
+        function sanitizeHtml(html) {
+            // Create a temporary div to parse HTML
+            var temp = document.createElement('div');
+            temp.innerHTML = html;
+            
+            // Remove script tags and other dangerous elements
+            var scripts = temp.querySelectorAll('script');
+            for (var i = 0; i < scripts.length; i++) {
+                scripts[i].remove();
+            }
+            
+            return temp.innerHTML;
+        }
+        
+        // Function to convert content to numbered lists
+        function convertToNumberedLists(content) {
+            // Replace <ul> with <ol> to ensure numbered lists
+            content = content.replace(/<ul([^>]*)>/gi, '<ol$1>');
+            content = content.replace(/<\/ul>/gi, '</ol>');
+            return content;
+        }
+        
+        // Function to setup image click handlers
+        function setupImageModal() {
+            // Create modal if it doesn't exist
+            var modal = document.getElementById('image-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'image-modal';
+                modal.className = 'image-modal';
+                modal.innerHTML = '<span class="close">&times;</span><img id="modal-image">';
+                document.body.appendChild(modal);
+            }
+            
+            var modalImg = document.getElementById('modal-image');
+            var closeBtn = modal.querySelector('.close');
+            
+            // Add click handlers to all images in content
+            var images = document.querySelectorAll('.category-content img');
+            for (var i = 0; i < images.length; i++) {
+                images[i].onclick = function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                };
+            }
+            
+            // Close modal when clicking X or background
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+            
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        }
+        
+        // Load and display categories
+        function loadCategories() {
+            makeRequest('/api/categories', function(error, data) {
+                var mainContent = document.getElementById('main-content');
+                
+                if (error || !data.success) {
+                    mainContent.innerHTML = '<div class="error">Failed to load categories: ' + (error || data.error) + '</div>';
+                    return;
+                }
+                
+                var categories = data.categories || [];
+                
+                if (categories.length === 0) {
+                    mainContent.innerHTML = '<div class="error">No categories available</div>';
+                    return;
+                }
+                
+                // Build the complete content in one container
+                var html = '';
+                
+                // Contents section
+                html += '<div class="contents-section">';
+                html += '<h3>Contents</h3>';
+                html += '<ul>';
+                for (var i = 0; i < categories.length; i++) {
+                    var category = categories[i];
+                    var safeId = createSafeId(category.name);
+                    html += '<li><a href="#' + safeId + '">' + escapeHtml(category.name) + '</a></li>';
+                }
+                html += '</ul>';
+                html += '</div>';
+                
+                // Category sections
+                for (var i = 0; i < categories.length; i++) {
+                    var category = categories[i];
+                    var safeId = createSafeId(category.name);
+                    var content = category.content || 'No content available for this category.';
+                    
+                    html += '<div id="' + safeId + '">';
+                    html += '<div class="category-title">' + escapeHtml(category.name) + '</div>';
+                    
+                    // Check if content contains HTML tags (from rich text editor)
+                    if (content.indexOf('<') !== -1 && content.indexOf('>') !== -1) {
+                        // Content has HTML, sanitize and convert to numbered lists
+                        var sanitizedContent = sanitizeHtml(content);
+                        var numberedContent = convertToNumberedLists(sanitizedContent);
+                        html += '<div class="category-content">' + numberedContent + '</div>';
+                    } else {
+                        // Plain text content, escape and preserve line breaks
+                        html += '<div class="category-content">' + escapeHtml(content).replace(/\n/g, '<br>') + '</div>';
+                    }
+                    
+                    html += '</div>';
+                }
+                
+                mainContent.innerHTML = html;
+                
+                // Setup image modal after content is loaded
+                setupImageModal();
+            });
+        }
+        
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Load content when page loads
+        window.onload = function() {
+            loadCategories();
+        };
+    </script>
+</body>
+</html>

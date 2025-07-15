@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDG Staff Panel</title>
+    <!-- Quill.js CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f47e8;
+            --secondary: #f1f5f9;
+            --success: #10b981;
+            --success-dark: #059669;
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --warning: #f59e0b;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .header p {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-left: auto;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            max-width: 1400px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 2rem;
+            height: calc(100vh - 140px);
+        }
+        
+        .sidebar {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            overflow-y: auto;
+        }
+        
+        .sidebar h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .main-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            overflow-y: auto;
+        }
+        
+        .category-item {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .category-item:hover {
+            background: #f1f5f9;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .category-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .category-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .category-item.active::before {
+            transform: scaleY(1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .category-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0.25rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: var(--success-dark);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: var(--danger-dark);
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-primary);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .status {
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .status.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .new-category-form {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            margin-top: 1.5rem;
+            border: 1px solid #bae6fd;
+            display: none;
+        }
+        
+        .new-category-form.show {
+            display: block;
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .editor-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        /* Quill editor styling */
+        #editor {
+            min-height: 400px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        
+        .ql-editor {
+            min-height: 400px;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        
+        .ql-toolbar {
+            border-top-left-radius: var(--radius-sm);
+            border-top-right-radius: var(--radius-sm);
+            border-color: var(--border);
+        }
+        
+        .ql-container {
+            border-bottom-left-radius: var(--radius-sm);
+            border-bottom-right-radius: var(--radius-sm);
+            border-color: var(--border);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state small {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>
+                <i data-feather="shield"></i>
+                DDG Staff Panel
+            </h1>
+            <p>Category-Based Rules Management System</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <h3>
+                <i data-feather="folder"></i>
+                Categories
+            </h3>
+            <div id="category-list"></div>
+            
+            <button class="btn btn-success" onclick="showNewCategoryForm()">
+                <i data-feather="plus"></i>
+                Add Category
+            </button>
+            
+            <div class="new-category-form" id="new-category-form">
+                <div class="form-group">
+                    <label>Category Name:</label>
+                    <input type="text" id="new-category-name" placeholder="Enter category name">
+                </div>
+                <div class="form-group">
+                    <label>Category ID:</label>
+                    <input type="text" id="new-category-id" placeholder="Enter unique ID">
+                </div>
+                <button class="btn btn-success btn-small" onclick="createCategory()">
+                    <i data-feather="check"></i>
+                    Create
+                </button>
+                <button class="btn btn-small" onclick="hideNewCategoryForm()">
+                    <i data-feather="x"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="editor-header" id="editor-header">
+                <h2 id="editor-title">Select a category to edit</h2>
+                <div class="editor-actions">
+                    <button class="btn btn-success" onclick="saveCurrentCategory()" id="save-btn" disabled>
+                        <i data-feather="save"></i>
+                        Save
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteCurrentCategory()" id="delete-btn" disabled>
+                        <i data-feather="trash-2"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+            
+            <div id="category-editor" class="hidden">
+                <div class="form-group">
+                    <label>Category Name:</label>
+                    <input type="text" id="category-name-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>Content:</label>
+                    <div id="editor"></div>
+                </div>
+            </div>
+            
+            <div id="empty-state" class="empty-state">
+                <div class="empty-state-icon">
+                    <i data-feather="edit-3"></i>
+                </div>
+                <p>Select a category to start editing</p>
+                <small>Choose a category from the sidebar to begin managing its content</small>
+            </div>
+            
+            <div id="status"></div>
+        </div>
+    </div>
+    
+    <!-- Quill.js JavaScript -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script>
+        // Initialize Feather icons
+        feather.replace();
+        
+        let categories = [];
+        let currentCategory = null;
+        let quill = null;
+        
+        // Load categories on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quill editor
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'align': [] }],
+                        ['link', 'image', 'blockquote', 'code-block'],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Enter category content here...'
+            });
+            
+            loadCategories();
+        });
+        
+        // API helper function
+        async function apiRequest(method, url, data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(url, options);
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Request failed');
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+        
+        // Load categories from server
+        async function loadCategories() {
+            try {
+                showStatus('Loading categories...', 'success');
+                const result = await apiRequest('GET', '/api/categories');
+                categories = result.categories || [];
+                renderCategoryList();
+                showStatus('Categories loaded successfully!', 'success');
+            } catch (error) {
+                showStatus('Failed to load categories: ' + error.message, 'error');
+            }
+        }
+        
+        // Render the category list in sidebar
+        function renderCategoryList() {
+            const categoryList = document.getElementById('category-list');
+            categoryList.innerHTML = '';
+            
+            if (categories.length === 0) {
+                categoryList.innerHTML = '<p style="color: var(--text-secondary); font-style: italic; text-align: center; padding: 2rem 0;">No categories found</p>';
+                return;
+            }
+            
+            categories.forEach(category => {
+                const div = document.createElement('div');
+                div.className = 'category-item';
+                if (currentCategory && currentCategory.id === category.id) {
+                    div.classList.add('active');
+                }
+                
+                div.innerHTML = `
+                    <span class="category-name">${category.name}</span>
+                    <button class="btn btn-danger btn-icon btn-small" onclick="event.stopPropagation(); deleteCategory('${category.id}')" title="Delete">
+                        <i data-feather="trash-2" style="width: 14px; height: 14px;"></i>
+                    </button>
+                `;
+                
+                // Make entire div clickable
+                div.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                        selectCategory(category.id);
+                    }
+                });
+                
+                categoryList.appendChild(div);
+            });
+            
+            // Re-initialize Feather icons for new elements
+            feather.replace();
+        }
+        
+        // Select a category for editing
+        function selectCategory(categoryId) {
+            const category = categories.find(cat => cat.id === categoryId);
+            if (!category) {
+                showStatus('Category not found!', 'error');
+                return;
+            }
+            
+            currentCategory = category;
+            
+            // Update UI
+            document.getElementById('editor-title').textContent = `Editing: ${category.name}`;
+            document.getElementById('category-name-input').value = category.name;
+            
+            // Set content in Quill editor
+            if (quill) {
+                quill.root.innerHTML = category.content || '';
+            }
+            
+            document.getElementById('save-btn').disabled = false;
+            document.getElementById('delete-btn').disabled = false;
+            
+            // Show editor, hide empty state
+            document.getElementById('category-editor').classList.remove('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+            
+            renderCategoryList();
+            showStatus(`Selected category: ${category.name}`, 'success');
+        }
+        
+        // Save current category
+        async function saveCurrentCategory() {
+            if (!currentCategory) {
+                showStatus('No category selected!', 'error');
+                return;
+            }
+            
+            try {
+                const name = document.getElementById('category-name-input').value.trim();
+                const content = quill ? quill.root.innerHTML : '';
+                
+                if (!name) {
+                    showStatus('Category name is required!', 'error');
+                    return;
+                }
+                
+                await apiRequest('PUT', `/api/categories/${currentCategory.id}`, { name, content });
+                
+                // Update local data
+                currentCategory.name = name;
+                currentCategory.content = content;
+                
+                // Update categories array
+                const index = categories.findIndex(cat => cat.id === currentCategory.id);
+                if (index !== -1) {
+                    categories[index] = currentCategory;
+                }
+                
+                renderCategoryList();
+                document.getElementById('editor-title').textContent = `Editing: ${name}`;
+                showStatus('Category saved successfully!', 'success');
+            } catch (error) {
+                showStatus('Failed to save category: ' + error.message, 'error');
+            }
+        }
+        
+        // Delete current category
+        function deleteCurrentCategory() {
+            if (!currentCategory) {
+                showStatus('No category selected!', 'error');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to delete "${currentCategory.name}"?`)) {
+                deleteCategory(currentCategory.id);
+            }
+        }
+        
+        // Delete a category
+        async function deleteCategory(categoryId) {
+            try {
+                await apiRequest('DELETE', `/api/categories/${categoryId}`);
+                
+                // Remove from local array
+                categories = categories.filter(cat => cat.id !== categoryId);
+                
+                // Clear editor if this was the selected category
+                if (currentCategory && currentCategory.id === categoryId) {
+                    currentCategory = null;
+                    document.getElementById('category-editor').classList.add('hidden');
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('editor-title').textContent = 'Select a category to edit';
+                    document.getElementById('save-btn').disabled = true;
+                    document.getElementById('delete-btn').disabled = true;
+                    
+                    // Clear Quill editor
+                    if (quill) {
+                        quill.setContents([]);
+                    }
+                }
+                
+                renderCategoryList();
+                showStatus('Category deleted successfully!', 'success');
+            } catch (error) {
+                showStatus('Failed to delete category: ' + error.message, 'error');
+            }
+        }
+        
+        // Show new category form
+        function showNewCategoryForm() {
+            document.getElementById('new-category-form').classList.add('show');
+            document.getElementById('new-category-name').focus();
+        }
+        
+        // Hide new category form
+        function hideNewCategoryForm() {
+            document.getElementById('new-category-form').classList.remove('show');
+            document.getElementById('new-category-name').value = '';
+            document.getElementById('new-category-id').value = '';
+        }
+        
+        // Create new category
+        async function createCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            const id = document.getElementById('new-category-id').value.trim();
+            
+            if (!name || !id) {
+                showStatus('Please enter both name and ID', 'error');
+                return;
+            }
+            
+            // Check if ID already exists
+            if (categories.find(cat => cat.id === id)) {
+                showStatus('Category ID already exists!', 'error');
+                return;
+            }
+            
+            try {
+                const result = await apiRequest('POST', '/api/categories', { name, id });
+                
+                // Add to local array
+                categories.push(result.category);
+                
+                renderCategoryList();
+                hideNewCategoryForm();
+                selectCategory(result.category.id);
+                showStatus('Category created successfully!', 'success');
+            } catch (error) {
+                showStatus('Failed to create category: ' + error.message, 'error');
+            }
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                statusEl.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Auto-generate ID from name
+        document.getElementById('new-category-name').addEventListener('input', function() {
+            const name = this.value;
+            const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            document.getElementById('new-category-id').value = id;
+        });
+        
+        // Allow Enter key to create category
+        document.getElementById('new-category-name').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                createCategory();
+            }
+        });
+        
+        document.getElementById('new-category-id').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                createCategory();
+            }
+        });
+    </script>
+</body>
+</html>

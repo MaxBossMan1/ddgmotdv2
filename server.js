@@ -59,8 +59,8 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) {
 
 // Steam Passport Strategy
 passport.use(new SteamStrategy({
-    returnURL: `http://34.9.197.43:${PORT}/auth/steam/return`,
-    realm: `http://34.9.197.43:${PORT}/`,
+    returnURL: `http://34.72.229.75:${PORT}/auth/steam/return`,
+    realm: `http://34.72.229.75:${PORT}/`,
     apiKey: STEAM_API_KEY
 }, (identifier, profile, done) => {
     // Extract Steam ID from identifier
@@ -408,6 +408,6 @@ initializeData();
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`DDG MOTD Server running on port ${PORT}`);
-    console.log(`MOTD URL: http://34.9.197.43:${PORT}/motd`);
-    console.log(`Staff Panel: http://34.9.197.43:${PORT}/staff`);
+    console.log(`MOTD URL: http://34.72.229.75:${PORT}/motd`);
+    console.log(`Staff Panel: http://34.72.229.75:${PORT}/staff`);
 });

@@ -15,6 +15,14 @@ app.use(cors({
     origin: [`http://localhost:${PORT}`, `http://34.72.229.75:${PORT}`],
     credentials: true
 }));
+
+// Add request logging for debugging
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url} from ${req.ip}`);
+    console.log('Headers:', req.headers);
+    next();
+});
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static('public'));
 
@@ -284,6 +292,9 @@ app.post('/api/users', requireAuth, (req, res) => {
 });
 
 app.delete('/api/users/:steamid', requireAuth, (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ success: false, error: 'Admin access required' });
+    }
     try {
         const steamid = req.params.steamid;
 
@@ -383,6 +394,9 @@ app.put('/api/categories/:id', requireAuth, (req, res) => {
 
 // Delete specific category (for staff panel)
 app.delete('/api/categories/:id', requireAuth, (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ success: false, error: 'Admin access required' });
+    }
     try {
         const categoryId = req.params.id;
 

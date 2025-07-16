@@ -12,7 +12,7 @@ const STEAM_API_KEY = process.env.STEAM_API_KEY || '5342416E0F6A68B894D89F5FFF53
 
 // Middleware
 app.use(cors({
-    origin: `http://localhost:${PORT}`,
+    origin: [`http://localhost:${PORT}`, `http://34.72.229.75:${PORT}`],
     credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
@@ -32,6 +32,28 @@ app.use(passport.session());
 
 // Serve public files
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        server: 'DDG MOTD v2.1'
+    });
+});
+
+// Root route
+app.get('/', (req, res) => {
+    res.send(`
+        <h1>DDG MOTD Server v2.1</h1>
+        <p>Server is running successfully!</p>
+        <ul>
+            <li><a href="/motd">MOTD (for GMod)</a></li>
+            <li><a href="/staff">Staff Panel</a></li>
+            <li><a href="/health">Health Check</a></li>
+        </ul>
+    `);
+});
 
 // Staff panel routes
 app.get('/staff/login', (req, res) => {
@@ -65,18 +87,18 @@ passport.use(new SteamStrategy({
 }, (identifier, profile, done) => {
     // Extract Steam ID from identifier
     const steamId = identifier.split('/').pop();
-    
+
     // Check if user is authorized
     const users = readUsers();
     const authorizedUser = users.find(user => user.steamid === steamId);
-    
+
     if (authorizedUser) {
         // Update display name from Steam profile
         authorizedUser.displayName = profile.displayName;
         authorizedUser.avatar = profile.photos[0]?.value;
         authorizedUser.lastLogin = new Date().toISOString();
         writeUsers(users);
-        
+
         return done(null, authorizedUser);
     } else {
         return done(null, false, { message: 'Unauthorized Steam ID' });
@@ -119,7 +141,7 @@ Basing Rules
 4. You may have a KOS line + sign outside the entrance of your base. It must be noticeable. No tiny letters or hard to see colors. (Keep KOS reasons reasonable. no KOS **** cause I don't like him, etc)`;
         fs.writeFileSync(RULES_FILE, defaultRules);
     }
-    
+
     if (!fs.existsSync(CATEGORIES_FILE)) {
         const defaultCategories = [
             { "id": "general", "name": "General Rules", "content": "<h2>General Rules</h2><ol><li>Use common sense.</li><li>If you find yourself using a 'loophole' in the rules to your advantage, it is likely you are breaking at least one other rule.</li><li>No politics, harassment, sexism, racism, discrimination, bigotry, porn, NSFW content, malicious behavior, etc.</li><li>Crossfire is counted as RDM.</li><li>Running into spawn to avoid any roleplay situation is considered FailRP.</li><li>No class can /advert murder or /advert counter.</li></ol>" },
@@ -186,7 +208,7 @@ function requireAuth(req, res, next) {
 // Authentication Routes
 app.get('/auth/steam', passport.authenticate('steam'));
 
-app.get('/auth/steam/return', 
+app.get('/auth/steam/return',
     passport.authenticate('steam', { failureRedirect: '/staff/login?error=unauthorized' }),
     (req, res) => {
         res.redirect('/staff/dashboard');
@@ -236,14 +258,14 @@ app.post('/api/users', requireAuth, (req, res) => {
         if (!steamid || !displayName) {
             return res.status(400).json({ success: false, error: 'Steam ID and display name are required' });
         }
-        
+
         const users = readUsers();
-        
+
         // Check if user already exists
         if (users.find(user => user.steamid === steamid)) {
             return res.status(400).json({ success: false, error: 'User already exists' });
         }
-        
+
         const newUser = {
             steamid: steamid,
             displayName: displayName,
@@ -251,10 +273,10 @@ app.post('/api/users', requireAuth, (req, res) => {
             addedBy: req.user.steamid,
             addedAt: new Date().toISOString()
         };
-        
+
         users.push(newUser);
         writeUsers(users);
-        
+
         res.json({ success: true, message: 'User added successfully', user: newUser });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add user' });
@@ -264,21 +286,21 @@ app.post('/api/users', requireAuth, (req, res) => {
 app.delete('/api/users/:steamid', requireAuth, (req, res) => {
     try {
         const steamid = req.params.steamid;
-        
+
         // Prevent users from deleting themselves
         if (steamid === req.user.steamid) {
             return res.status(400).json({ success: false, error: 'Cannot delete yourself' });
         }
-        
+
         const users = readUsers();
         const filteredUsers = users.filter(user => user.steamid !== steamid);
-        
+
         if (filteredUsers.length === users.length) {
             return res.status(404).json({ success: false, error: 'User not found' });
         }
-        
+
         writeUsers(filteredUsers);
-        
+
         res.json({ success: true, message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to delete user' });
@@ -312,23 +334,23 @@ app.post('/api/categories', requireAuth, (req, res) => {
         if (!name || !id) {
             return res.status(400).json({ success: false, error: 'Name and ID are required' });
         }
-        
+
         const categories = readCategories();
-        
+
         // Check if ID already exists
         if (categories.find(cat => cat.id === id)) {
             return res.status(400).json({ success: false, error: 'Category ID already exists' });
         }
-        
+
         const newCategory = {
             id: id,
             name: name,
             content: `<h2>${name}</h2><p>Content to be added...</p>`
         };
-        
+
         categories.push(newCategory);
         writeCategories(categories);
-        
+
         res.json({ success: true, message: 'Category created successfully', category: newCategory });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to create category' });
@@ -340,19 +362,19 @@ app.put('/api/categories/:id', requireAuth, (req, res) => {
     try {
         const categoryId = req.params.id;
         const { name, content } = req.body;
-        
+
         const categories = readCategories();
         const categoryIndex = categories.findIndex(cat => cat.id === categoryId);
-        
+
         if (categoryIndex === -1) {
             return res.status(404).json({ success: false, error: 'Category not found' });
         }
-        
+
         if (name) categories[categoryIndex].name = name;
         if (content) categories[categoryIndex].content = content;
-        
+
         writeCategories(categories);
-        
+
         res.json({ success: true, message: 'Category updated successfully' });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to update category' });
@@ -363,16 +385,16 @@ app.put('/api/categories/:id', requireAuth, (req, res) => {
 app.delete('/api/categories/:id', requireAuth, (req, res) => {
     try {
         const categoryId = req.params.id;
-        
+
         const categories = readCategories();
         const filteredCategories = categories.filter(cat => cat.id !== categoryId);
-        
+
         if (filteredCategories.length === categories.length) {
             return res.status(404).json({ success: false, error: 'Category not found' });
         }
-        
+
         writeCategories(filteredCategories);
-        
+
         res.json({ success: true, message: 'Category deleted successfully' });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to delete category' });

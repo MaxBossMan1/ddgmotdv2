@@ -7,6 +7,7 @@ const passport = require('passport');
 const SteamStrategy = require('passport-steam').Strategy;
 
 const app = express();
+app.enable('trust proxy');
 const PORT = process.env.PORT || 3000;
 const STEAM_API_KEY = process.env.STEAM_API_KEY;
 
@@ -34,7 +35,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'ddg-motd-secret-key-change-in-production',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: true }
 }));
 
 // Passport configuration

@@ -8,7 +8,10 @@ const SteamStrategy = require('passport-steam').Strategy;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const STEAM_API_KEY = process.env.STEAM_API_KEY || '5342416E0F6A68B894D89F5FFF53D496'; // You'll need to get this from Steam
+const STEAM_API_KEY = process.env.STEAM_API_KEY;
+
+// Debug: Log API key status (without exposing the full key)
+console.log('Steam API Key loaded:', STEAM_API_KEY ? `${STEAM_API_KEY.substring(0, 8)}...` : 'NOT FOUND');
 
 // Middleware
 app.use(cors({

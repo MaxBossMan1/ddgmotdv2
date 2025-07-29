@@ -1,23 +1,26 @@
+require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
-const SteamStrategy = require('passport-steam').Strategy;
+const DiscordStrategy = require('passport-discord').Strategy;
 
 const app = express();
 app.enable('trust proxy');
 const PORT = process.env.PORT || 3000;
-const STEAM_API_KEY = process.env.STEAM_API_KEY;
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 
-// Debug: Log API key status (without exposing the full key)
-console.log('Steam API Key loaded:', STEAM_API_KEY ? `${STEAM_API_KEY.substring(0, 8)}...` : 'NOT FOUND');
+// Debug: Log Discord client ID status
+console.log('Discord Client ID loaded:', DISCORD_CLIENT_ID ? 'Yes' : 'NOT FOUND');
 
 // Middleware
 app.use(cors({
-    origin: [`http://localhost:${PORT}`, `http://34.72.229.75:${PORT}`],
-    credentials: true
+    origin: ['http://34.63.247.63:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Add request logging for debugging
@@ -35,7 +38,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'ddg-motd-secret-key-change-in-production',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true }
+    cookie: { secure: false }
 }));
 
 // Passport configuration
@@ -56,15 +59,7 @@ app.get('/health', (req, res) => {
 
 // Root route
 app.get('/', (req, res) => {
-    res.send(`
-        <h1>DDG MOTD Server v2.1</h1>
-        <p>Server is running successfully!</p>
-        <ul>
-            <li><a href="/motd">MOTD (for GMod)</a></li>
-            <li><a href="/staff">Staff Panel</a></li>
-            <li><a href="/health">Health Check</a></li>
-        </ul>
-    `);
+    res.redirect('/motd');
 });
 
 // Staff panel routes
@@ -91,39 +86,39 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'));
 }
 
-// Steam Passport Strategy
-passport.use(new SteamStrategy({
-    returnURL: 'https://ddgmotd.com/auth/steam/return',
-    realm: 'https://ddgmotd.com/',
-    apiKey: STEAM_API_KEY
-}, (identifier, profile, done) => {
-    // Extract Steam ID from identifier
-    const steamId = identifier.split('/').pop();
+// Discord Passport Strategy
+passport.use(new DiscordStrategy({
+    clientID: DISCORD_CLIENT_ID,
+    clientSecret: DISCORD_CLIENT_SECRET,
+    callbackURL: 'http://34.63.247.63:3000/auth/discord/callback',
+    scope: ['identify']
+}, (accessToken, refreshToken, profile, done) => {
+    const discordId = profile.id;
 
     // Check if user is authorized
     const users = readUsers();
-    const authorizedUser = users.find(user => user.steamid === steamId);
+    const authorizedUser = users.find(user => user.discordId === discordId);
 
     if (authorizedUser) {
-        // Update display name from Steam profile
-        authorizedUser.displayName = profile.displayName;
-        authorizedUser.avatar = profile.photos[0]?.value;
+        // Update display name from Discord profile
+        authorizedUser.displayName = profile.username;
+        authorizedUser.avatar = profile.avatar ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png` : null;
         authorizedUser.lastLogin = new Date().toISOString();
         writeUsers(users);
 
         return done(null, authorizedUser);
     } else {
-        return done(null, false, { message: 'Unauthorized Steam ID' });
+        return done(null, false, { message: 'Unauthorized Discord ID' });
     }
 }));
 
 passport.serializeUser((user, done) => {
-    done(null, user.steamid);
+    done(null, user.discordId);
 });
 
-passport.deserializeUser((steamid, done) => {
+passport.deserializeUser((discordId, done) => {
     const users = readUsers();
-    const user = users.find(u => u.steamid === steamid);
+    const user = users.find(u => u.discordId === discordId);
     done(null, user);
 });
 
@@ -218,10 +213,10 @@ function requireAuth(req, res, next) {
 // API Routes
 
 // Authentication Routes
-app.get('/auth/steam', passport.authenticate('steam'));
+app.get('/auth/discord', passport.authenticate('discord'));
 
-app.get('/auth/steam/return',
-    passport.authenticate('steam', { failureRedirect: '/staff/login?error=unauthorized' }),
+app.get('/auth/discord/callback',
+    passport.authenticate('discord', { failureRedirect: '/staff/login?error=unauthorized' }),
     (req, res) => {
         res.redirect('/staff/dashboard');
     }
@@ -250,7 +245,7 @@ app.get('/api/users', requireAuth, (req, res) => {
         const users = readUsers();
         // Remove sensitive information
         const safeUsers = users.map(user => ({
-            steamid: user.steamid,
+            discordId: user.discordId,
             displayName: user.displayName,
             role: user.role,
             addedBy: user.addedBy,
@@ -266,23 +261,23 @@ app.get('/api/users', requireAuth, (req, res) => {
 
 app.post('/api/users', requireAuth, (req, res) => {
     try {
-        const { steamid, displayName, role } = req.body;
-        if (!steamid || !displayName) {
-            return res.status(400).json({ success: false, error: 'Steam ID and display name are required' });
+        const { discordId, displayName, role } = req.body;
+        if (!discordId || !displayName) {
+            return res.status(400).json({ success: false, error: 'Discord ID and display name are required' });
         }
 
         const users = readUsers();
 
         // Check if user already exists
-        if (users.find(user => user.steamid === steamid)) {
+        if (users.find(user => user.discordId === discordId)) {
             return res.status(400).json({ success: false, error: 'User already exists' });
         }
 
         const newUser = {
-            steamid: steamid,
+            discordId: discordId,
             displayName: displayName,
             role: role || 'staff',
-            addedBy: req.user.steamid,
+            addedBy: req.user.discordId,
             addedAt: new Date().toISOString()
         };
 
@@ -295,20 +290,20 @@ app.post('/api/users', requireAuth, (req, res) => {
     }
 });
 
-app.delete('/api/users/:steamid', requireAuth, (req, res) => {
+app.delete('/api/users/:discordId', requireAuth, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).json({ success: false, error: 'Admin access required' });
     }
     try {
-        const steamid = req.params.steamid;
+        const discordId = req.params.discordId;
 
         // Prevent users from deleting themselves
-        if (steamid === req.user.steamid) {
+        if (discordId === req.user.discordId) {
             return res.status(400).json({ success: false, error: 'Cannot delete yourself' });
         }
 
         const users = readUsers();
-        const filteredUsers = users.filter(user => user.steamid !== steamid);
+        const filteredUsers = users.filter(user => user.discordId !== discordId);
 
         if (filteredUsers.length === users.length) {
             return res.status(404).json({ success: false, error: 'User not found' });
@@ -448,6 +443,6 @@ initializeData();
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`DDG MOTD Server running on port ${PORT}`);
-    console.log(`MOTD URL: http://34.72.229.75:${PORT}/motd`);
-    console.log(`Staff Panel: http://34.72.229.75:${PORT}/staff`);
+    console.log(`MOTD running at http://34.63.247.63:${PORT}/motd`);
+    console.log(`Staff Panel running at http://34.63.247.63:${PORT}/staff`);
 });

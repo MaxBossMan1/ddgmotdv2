@@ -23,38 +23,8 @@
             position: relative;
         }
         
-        /* Blur overlay for background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('newbackground.png') center center fixed;
-            background-size: cover;
-            filter: blur(8px);
-            z-index: -2;
-        }
-        
         /* Remove the login-register CSS since we're removing the buttons */
         /* .login-register styles can be deleted */
-        
-        /* Enhanced fade overlay with CSS custom property */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, 
-                rgba(0,0,0,var(--scroll-opacity, 0.3)) 0%, 
-                rgba(0,0,0,calc(var(--scroll-opacity, 0.3) + 0.2)) 50%, 
-                rgba(0,0,0,calc(var(--scroll-opacity, 0.3) + 0.5)) 100%);
-            z-index: -1;
-            transition: all 0.1s ease;
-        }
         
         /* Main content wrapper to ensure proper layering */
         .page-wrapper {
@@ -352,24 +322,11 @@
         </div>
         
         <div class="footer">
-            Copyright 2019-2020 © Digital Delta Gaming
+            Copyright 2025 © Digital Delta Gaming
         </div>
         
         <a href="#" class="facebook-icon">^</a>
     </div>
-    
-    <!-- Add scroll fade effect script -->
-    <script>
-        // Enhanced scroll fade effect
-        window.addEventListener('scroll', function() {
-            var scrolled = window.pageYOffset;
-            var rate = scrolled * -0.5;
-            var opacity = Math.min(0.9, 0.3 + (scrolled / 1000));
-            
-            // Update the fade overlay opacity based on scroll
-            document.body.style.setProperty('--scroll-opacity', opacity);
-        });
-    </script>
     
     <script>
         // Simple XMLHttpRequest for Awesomium compatibility

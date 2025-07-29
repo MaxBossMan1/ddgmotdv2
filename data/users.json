@@ -1,18 +1,18 @@
 [
   {
-    "steamid": "76561198157812847",
-    "displayName": "MaxBossMan1",
+    "discordId": "616691120407052291",
+    "displayName": "maxbossman1",
     "role": "admin",
     "addedBy": "system",
     "addedAt": "2024-01-01T00:00:00.000Z",
-    "avatar": "https://avatars.steamstatic.com/69b0dbeb3ae8c452a5cf2df29e5606a244e85aef.jpg",
-    "lastLogin": "2025-07-15T07:33:12.899Z"
+    "avatar": "https://cdn.discordapp.com/avatars/616691120407052291/a82ce885da8120285084b73a38149414.png",
+    "lastLogin": "2025-07-29T17:31:28.252Z"
   },
   {
-    "steamid": "76561198097701525",
+    "discordId": "303675233359888384",
     "displayName": "Rexxor",
     "role": "admin",
-    "addedBy": "76561198157812847",
+    "addedBy": "616691120407052291",
     "addedAt": "2025-07-15T07:35:42.969Z"
   }
 ]

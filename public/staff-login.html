@@ -53,8 +53,8 @@
             color: #ccc;
         }
 
-        .steam-login-btn {
-            background: linear-gradient(45deg, #171a21, #2a475e);
+        .discord-login-btn {
+            background-color: #5865F2;
             color: white;
             border: none;
             padding: 15px 30px;
@@ -71,16 +71,18 @@
             justify-content: center;
         }
 
-        .steam-login-btn:hover {
-            background: linear-gradient(45deg, #2a475e, #171a21);
+        .discord-login-btn:hover {
+            background-color: #4752C4;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .steam-icon {
-            width: 20px;
-            height: 20px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v-.07zM17.9 17.39c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>') no-repeat center;
+
+
+        .discord-icon {
+            width: 24px;
+            height: 24px;
+            background: url('https://discord.com/assets/2c21aeda16de354ba5334551a883b481.png') no-repeat center center;
             background-size: contain;
         }
 
@@ -109,9 +111,9 @@
         
         <div id="error-message" class="error-message"></div>
         
-        <a href="/auth/steam" class="steam-login-btn">
-            <div class="steam-icon"></div>
-            Sign in through Steam
+        <a href="/auth/discord" class="discord-login-btn">
+            <div class="discord-icon"></div>
+            Sign in with Discord
         </a>
         
         <div class="info-text">
@@ -128,7 +130,7 @@
         
         if (error === 'unauthorized') {
             const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = 'Your Steam account is not authorized to access the staff panel.';
+            errorDiv.textContent = 'Your Discord account is not authorized to access the staff panel.';
             errorDiv.style.display = 'block';
         }
     </script>

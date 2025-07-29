@@ -364,8 +364,8 @@
                 <form id="add-user-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="new-steamid">Steam ID</label>
-                            <input type="text" id="new-steamid" placeholder="76561198000000000" required>
+                            <label for="new-discordId">Discord ID</label>
+                            <input type="text" id="new-discordId" placeholder="123456789012345678" required>
                         </div>
                         <div class="form-group">
                             <label for="new-displayname">Display Name</label>
@@ -391,7 +391,7 @@
                         <tr>
                             <th>Avatar</th>
                             <th>Display Name</th>
-                            <th>Steam ID</th>
+                            <th>Discord ID</th>
                             <th>Role</th>
                             <th>Added By</th>
                             <th>Added Date</th>
@@ -662,13 +662,13 @@ let categories = [];
                         ${user.avatar ? `<img src="${user.avatar}" class="user-avatar-small" alt="Avatar">` : '<div class="user-avatar-small" style="background: #4a90e2;"></div>'}
                     </td>
                     <td>${user.displayName}</td>
-                    <td>${user.steamid}</td>
+                    <td>${user.discordId}</td>
                     <td>${user.role}</td>
                     <td>${user.addedBy}</td>
                     <td>${user.addedAt ? new Date(user.addedAt).toLocaleDateString() : 'N/A'}</td>
                     <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}</td>
                     <td>
-                        ${user.steamid !== currentUser.steamid ? `<button class="btn btn-danger" onclick="deleteUser('${user.steamid}')">Delete</button>` : '<span style="color: #ccc;">Current User</span>'}
+                        ${user.discordId !== currentUser.discordId ? `<button class="btn btn-danger" onclick="deleteUser('${user.discordId}')">Delete</button>` : '<span style="color: #ccc;">Current User</span>'}
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -679,7 +679,7 @@ let categories = [];
         document.getElementById('add-user-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const steamid = document.getElementById('new-steamid').value;
+            const discordId = document.getElementById('new-discordId').value;
             const displayName = document.getElementById('new-displayname').value;
             const role = document.getElementById('new-role').value;
             
@@ -690,7 +690,7 @@ let categories = [];
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
-                    body: JSON.stringify({ steamid, displayName, role })
+                    body: JSON.stringify({ discordId, displayName, role })
                 });
                 
                 const data = await response.json();
@@ -708,13 +708,13 @@ let categories = [];
         });
 
         // Delete user
-        async function deleteUser(steamid) {
+        async function deleteUser(discordId) {
             if (!confirm('Are you sure you want to delete this user?')) {
                 return;
             }
             
             try {
-                const response = await fetch(`/api/users/${steamid}`, {
+                const response = await fetch(`/api/users/${discordId}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });

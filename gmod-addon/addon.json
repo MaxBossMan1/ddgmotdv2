@@ -1,0 +1,10 @@
+{
+    "title": "DigitalDeltaGaming - Server Rules",
+    "type": "ServerContent",
+    "tags": ["roleplay", "darkrp"],
+    "ignore": [
+        "*.psd",
+        "*.vcproj",
+        "*.svn*"
+    ]
+} 

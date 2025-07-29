@@ -441,7 +441,7 @@ app.get('/motd', (req, res) => {
 // Initialize data and start server
 initializeData();
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '127.0.0.1', () => {
     console.log(`DDG MOTD Server running on port ${PORT}`);
     console.log(`MOTD running at http://34.63.247.63:${PORT}/motd`);
     console.log(`Staff Panel running at http://34.63.247.63:${PORT}/staff`);

@@ -19,9 +19,7 @@ export default async function handler(req, res) {
   try {
     const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
     const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-    const REDIRECT_URI = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}/api/auth/callback`
-      : 'http://localhost:3000/api/auth/callback';
+    const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/api/auth/callback';
 
     if (!DISCORD_CLIENT_ID || !DISCORD_CLIENT_SECRET) {
       return res.redirect('/staff/login?error=config_error');

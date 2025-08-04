@@ -4,9 +4,7 @@ export default function handler(req, res) {
   }
 
   const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
-  const REDIRECT_URI = process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}/api/auth/callback`
-    : 'http://localhost:3000/api/auth/callback';
+  const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/api/auth/callback';
 
   if (!DISCORD_CLIENT_ID) {
     return res.status(500).json({ error: 'Discord client ID not configured' });
